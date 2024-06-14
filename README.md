@@ -1,5 +1,5 @@
 # File Renamer and Mover
-RenamingV7 is the lattest working script which has been customized to ITRUST requirements 
+`RenamingV7` is the lattest working script which has been customized to ITRUST requirements 
 
 This Python script renames and moves files from a source directory to specific destination directories based on predefined mappings and folder structures. It is designed to work on Windows and organizes files into a structured hierarchy under `OneDrive`.
 
