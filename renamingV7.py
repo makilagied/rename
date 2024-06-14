@@ -14,7 +14,9 @@ class FileRenamerMover:
         self.source_directory = source_directory
         self.additional_info = additional_info
         self.username = self.get_logged_in_username()
-        self.base_destination_directory = os.path.join('C:\\Users', self.username, 'OneDrive - iTrust Finance Limited', 'itrust')
+        # self.base_destination_directory = os.path.join('C:\\Users', self.username, 'OneDrive - iTrust Finance Limited', 'itrust')
+        self.base_destination_directory = os.path.join('C:\\Users', self.username, 'OneDrive - iTrust Finance Limited', 'IMAAN CBS REPORTS')
+        # C:\Users\erick.makilagi\OneDrive - iTrust Finance Limited\IMAAN CBS REPORTS
         self.finance_folder = os.path.join(self.base_destination_directory, 'FINANCE')
         self.credit_folder = os.path.join(self.base_destination_directory, 'CREDIT')
         self.investment_folder = os.path.join(self.base_destination_directory, 'INVESTMENT')
@@ -40,20 +42,22 @@ class FileRenamerMover:
         elif new_name.startswith('SKUK_Report_'):
             return os.path.join(self.finance_folder, '2024', 'JUNE', 'SUKUK')
         elif new_name.startswith('Daily Investment Report_'):
-            return os.path.join(self.finance_folder, '2024', 'JUNE', 'INVESTMENT FUND REPORT')
+            return os.path.join(self.investment_folder, '2024', 'JUNE')
         elif new_name.startswith('FUND CUSTOMER BALANCE_'):
             return os.path.join(self.finance_folder, '2024', 'JUNE', 'FUND CUSTOMER BALANCE')
         elif new_name.startswith('Data Entry Report_'):
             return os.path.join(self.finance_folder, '2024', 'JUNE', 'DATA ENTRY')
         elif new_name.startswith('Balancesheet_consolidated_'):
             suffix = new_name.split('_')[2]
-            return os.path.join(self.finance_folder, '2024', 'JUNE', 'BALANCESHEET', suffix)
+            return os.path.join(self.finance_folder, '2024', 'JUNE', 'BALANCE SHEET', suffix)
         elif new_name.startswith('CUSTOMER BALANCE_'):
             return os.path.join(self.credit_folder, '2024', 'JUNE', 'CUSTOMER BALANCE')
         elif new_name.startswith('Bot_Loan_status_'):
             return os.path.join(self.credit_folder, '2024', 'JUNE', 'BOT LOAN STATUS')
+        elif new_name.startswith('Loan Report Swalha_'):
+            return os.path.join(self.credit_folder, '2024', 'JUNE', 'BOT LOAN STATUS')
         else:
-            return os.path.join(self.investment_folder, '2024', 'JUNE')
+            return os.path.join(self.base_destination_directory)
 
     def rename_and_move_files(self):
         """
@@ -119,8 +123,8 @@ if __name__ == "__main__":
 
     # Define variables to be used in the new file names
     additional_info = {
-        'RPTDATE': '14Jun2030',
-        'SYSDATE': 'sysdate14Jun2030',
+        'RPTDATE': '14Jun2024',
+        'SYSDATE': 'sysdate14Jun2024',
         # Add more variables as needed
     }
 
