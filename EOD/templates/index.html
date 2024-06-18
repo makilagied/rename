@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBS | Reports </title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 50px;
+            background-color: #f8f9fa; /* Light gray background for the body */
+            color: #333; /* Dark gray text color for better readability */
+        }
+        .container {
+            max-width: 400px;
+            background: #fff; /* White background for the form container */
+            padding: 20px; /* Padding inside the form container */
+            border-radius: 10px; /* Rounded corners for the form container */
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for the form container */
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .btn-primary {
+            width: 100%;
+            background-color: #E34C25; /* Primary button background color */
+            border-color: #114369; /* Primary button border color */
+        }
+        .btn-primary:hover {
+            background-color: #114369; /* Slightly darker shade for hover state */
+            border-color: #E34C25;
+        }
+        .input-group-text {
+            width: 120px;
+            background-color: #114369; /* Background color for input group text */
+            color: #fff; /* White text color for input group text */
+        }
+        .form-control {
+            border: 1px solid #ced4da; /* Light gray border for form controls */
+        }
+        .alert {
+            margin-top: 20px;
+        }
+        .alert-success {
+            background-color: #d4edda; /* Light green background for success alert */
+            color: #155724; /* Dark green text color for success alert */
+            border-color: #c3e6cb; /* Green border for success alert */
+        }
+        .alert-danger {
+            background-color: #f8d7da; /* Light red background for error alert */
+            color: #721c24; /* Dark red text color for error alert */
+            border-color: #f5c6cb; /* Red border for error alert */
+        }
+        #messages {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+    </style>
+    
+    
+</head>
+<body>
+
+<div class="container">
+    <h3 class="text-center">CBS REPOTS</h3>
+    <form id="uploadForm" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="rptdate">Please Indicate the following</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Report Date</span>
+                </div>
+                <input type="date" class="form-control" id="rptdate" name="rptdate" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <!-- <label for="sysdate">System Date:</label> -->
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">System Date</span>
+                </div>
+                <input type="date" class="form-control" id="sysdate" name="sysdate" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="files">Select files to Rename and Upload</label>
+            <input type="file" class="form-control-file" id="files" name="files" multiple accept=".xls,.xlsx" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Execute</button>
+    </form>
+</div>
+<div id="messages"></div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#uploadForm').on('submit', function (e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+            $.ajax({
+                url: '/process_files',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    let messageDiv = $('#messages');
+                    messageDiv.empty();
+                    if (data.error) {
+                        messageDiv.append('<div class="alert alert-danger" role="alert">' + data.error + '</div>');
+                    } else {
+                        messageDiv.append('<div class="alert alert" role="alert"><b>Process Completed</b></div> <div><hr></div>');
+                        data.forEach(file => {
+                            if (file.error) {
+                                messageDiv.append('<div class="alert alert-danger" role="alert">Error processing ' + file.file + ': ' + file.error + '</div>');
+                            } else {
+                                messageDiv.append('<div class="alert alert-success" role="alert">' + file.old + ' renamed to ' + file.new + ' and moved to ' + file.moved_to + '</div>');
+                            }
+                        });
+                    }
+                },
+                error: function () {
+                    $('#messages').append('<div class="alert alert-danger" role="alert">An error occurred while processing the files.</div>');
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
